@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Data Sertifikat Wisudawan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter untuk tampilan modern dan bersih ala Apple -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020611; /* Warna dasar biru sangat gelap */
+            margin: 0;
+            padding: 0;
+            min-height: 100dvh; /* Menggunakan dvh agar lebih presisi di mobile browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden; /* Mencegah geser horizontal di mobile */
+        }
+
+        /* Animasi Latar Belakang Liquid Silk murni CSS */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .silk-gold-1 {
+            position: absolute;
+            width: 150vw;
+            height: 25vh;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.25) 0%, transparent 60%);
+            top: 20%;
+            left: -20%;
+            transform: rotate(-30deg);
+            filter: blur(60px);
+            animation: silkAnim 12s infinite alternate ease-in-out;
+        }
+
+        .silk-gold-2 {
+            position: absolute;
+            width: 120vw;
+            height: 20vh;
+            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.2) 0%, transparent 60%);
+            bottom: 10%;
+            right: -20%;
+            transform: rotate(-40deg);
+            filter: blur(50px);
+            animation: silkAnim 15s infinite alternate-reverse ease-in-out;
+        }
+
+        .silk-blue {
+            position: absolute;
+            width: 100vw;
+            height: 80vh;
+            background: radial-gradient(circle at center, rgba(13, 37, 86, 0.5) 0%, transparent 70%);
+            top: -10%;
+            right: -10%;
+            filter: blur(70px);
+            animation: floatAnim 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes silkAnim {
+            0% { transform: rotate(-30deg) scale(1) translateY(0); opacity: 0.6; }
+            100% { transform: rotate(-25deg) scale(1.1) translateY(5vh); opacity: 1; }
+        }
+
+        @keyframes floatAnim {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-5vw, 5vh); }
+        }
+
+        /* Animasi masuk perlahan */
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(30px) scale(0.95); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .glass-container {
+            animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Efek Liquid Glass kustom (Ultra blur, semi-transparan, dengan border cahaya) */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .liquid-glass-card {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tombol Glassy yang memantulkan aksen warna emas */
+        .btn-glass {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glass::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+
+        .btn-glass:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+
+        .btn-glass:hover::before {
+            left: 200%;
+        }
+
+        .btn-glass:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Gradient Text untuk judul */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-6 text-white w-full">
+
+    <!-- Latar Belakang Liquid Silk CSS -->
+    <div class="bg-mesh">
+        <div class="silk-blue"></div>
+        <div class="silk-gold-1"></div>
+        <div class="silk-gold-2"></div>
+    </div>
+
+    <main class="glass-container liquid-glass mx-auto w-full max-w-lg rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 relative overflow-hidden text-center z-10">
+        
+        <!-- Efek Glow Dekoratif di belakang kontainer -->
+        <div class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-[80px] opacity-40"></div>
+        <div class="absolute -bottom-24 -left-24 w-64 h-64 bg-yellow-500 rounded-full mix-blend-screen filter blur-[80px] opacity-20"></div>
+
+        <div class="relative z-20">
+            <!-- Ikon Header -->
+            <div class="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-2xl liquid-glass-card flex items-center justify-center mb-5 sm:mb-6 shadow-lg border border-white/20">
+                <i data-lucide="graduation-cap" class="text-yellow-400 w-7 h-7 sm:w-8 sm:h-8"></i>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-gradient">
+                Portal Sertifikat
+            </h1>
+            <p class="text-white/70 text-sm sm:text-base font-medium mb-6 sm:mb-8">
+                Verifikasi Data Wisudawan
+            </p>
+
+            <!-- Box Himbauan / Alert -->
+            <div class="liquid-glass-card rounded-[1.25rem] sm:rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8 text-left relative overflow-hidden group">
+                <!-- Aksen Garis Kiri -->
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-300 to-yellow-600"></div>
+                
+                <div class="flex items-start gap-3 sm:gap-4">
+                    <i data-lucide="info" class="text-yellow-400 w-5 h-5 sm:w-6 sm:h-6 shrink-0 mt-0.5"></i>
+                    <div class="space-y-2 sm:space-y-3 text-[0.85rem] sm:text-[0.9rem] leading-relaxed text-white/90">
+                        <p class="font-semibold text-white">Perhatian Penting:</p>
+                        <ul class="list-disc pl-4 space-y-1 sm:space-y-1.5 marker:text-yellow-400">
+                            <li>Seluruh sertifikat disusun sesuai data yang diinput oleh Wali Kelas.</li>
+                            <li>Pastikan nama <b>siswa</b>, <b>ayah</b>, dan <b>ibu</b> sudah benar.</li>
+                            <li>Centang kolom konfirmasi jika data sudah final.</li>
+                        </ul>
+                        <div class="mt-2 sm:mt-3 inline-flex items-start sm:items-center gap-2 text-yellow-300 font-medium text-[0.7rem] sm:text-xs bg-yellow-400/10 px-3 py-2 sm:py-1.5 rounded-xl sm:rounded-full border border-yellow-400/20 leading-tight">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 shrink-0 mt-0.5 sm:mt-0"></i>
+                            <span>Prioritas desain diberikan pada data yang sudah lengkap.</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Link Spreadsheet -->
+            <a href="https://docs.google.com/spreadsheets/d/1aP7q6uWv-_7jIdNbYc0h1ZgfnY9etYBHp006PNcep3U/edit?usp=sharing" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="btn-glass w-full flex items-center justify-center gap-2 sm:gap-3 py-3.5 sm:py-4 px-5 sm:px-6 rounded-2xl text-white font-semibold text-[0.95rem] sm:text-lg cursor-pointer text-decoration-none">
+                <span>Buka Spreadsheet Data</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 sm:w-5 sm:h-5 opacity-80"></i>
+            </a>
+
+            <div class="mt-5 sm:mt-6 text-[0.65rem] sm:text-xs text-white/40 font-medium tracking-wide">
+                created by @anasubaid_
+            </div>
+        </div>
+    </main>
+
+    <!-- Inisialisasi Ikon -->
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
