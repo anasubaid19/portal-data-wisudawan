@@ -168,6 +168,33 @@
             transform: translateY(1px) scale(0.98);
         }
 
+        /* Tampilan Mode Gelap untuk Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(2, 6, 17, 0.85); /* Selaras dengan warna bg */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal Container Animation */
+        .modal-content {
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-backdrop.show .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
         /* Gradient Text untuk judul */
         .text-gradient {
             background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
@@ -227,20 +254,18 @@
                         <!-- Tambahan Himbauan Kontak (WhatsApp) -->
                         <div class="mt-3 pt-3 border-t border-white/10 flex items-start gap-2 text-[0.8rem] sm:text-[0.85rem] text-white/80">
                             <i data-lucide="phone" class="w-4 h-4 shrink-0 mt-0.5 text-green-400"></i>
-                            <p class="leading-relaxed">Jika ada kesalahan data mohon kabari panitia atau <a href="https://wa.me/6285921026401" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:text-green-300 font-medium underline underline-offset-4 decoration-green-400/30 transition-all">langsung direct ke nomor ini</a>.</p>
+                            <p class="leading-relaxed">Jika ada kesalahan data mohon kabari panitia atau <a href="https://wa.me/6285921026401" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:text-green-300 font-medium underline underline-offset-4 decoration-green-400/30 transition-all">langsung direct ke WA saya</a>.</p>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- Tombol Link Spreadsheet -->
-            <a href="https://docs.google.com/spreadsheets/d/1aP7q6uWv-_7jIdNbYc0h1ZgfnY9etYBHp006PNcep3U/edit?usp=sharing" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="btn-glass w-full flex items-center justify-center gap-2 sm:gap-3 py-3.5 sm:py-4 px-5 sm:px-6 rounded-2xl text-white font-semibold text-[0.95rem] sm:text-lg cursor-pointer text-decoration-none">
+            <button id="btnBukaSpreadsheet" 
+               class="btn-glass w-full flex items-center justify-center gap-2 sm:gap-3 py-3.5 sm:py-4 px-5 sm:px-6 rounded-2xl text-white font-semibold text-[0.95rem] sm:text-lg cursor-pointer text-decoration-none border-0">
                 <span>Buka Spreadsheet Data</span>
                 <i data-lucide="arrow-up-right" class="w-4 h-4 sm:w-5 sm:h-5 opacity-80"></i>
-            </a>
+            </button>
 
             <!-- Footer / Instagram Link dengan Animasi -->
             <div class="mt-5 sm:mt-6">
@@ -251,9 +276,67 @@
         </div>
     </main>
 
-    <!-- Inisialisasi Ikon -->
+    <!-- Modal Pop-up Konfirmasi -->
+    <div id="modalKonfirmasi" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-backdrop">
+        <div class="modal-content liquid-glass w-full max-w-[400px] rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border border-yellow-500/20 shadow-2xl">
+            <!-- Aksen Glow Emas di Modal -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500 rounded-full mix-blend-screen filter blur-[40px] opacity-30 pointer-events-none"></div>
+
+            <div class="mx-auto w-12 h-12 rounded-xl liquid-glass-card border border-white/10 flex items-center justify-center mb-5 shadow-inner">
+                <i data-lucide="alert-triangle" class="text-yellow-400 w-6 h-6"></i>
+            </div>
+            
+            <h2 class="text-xl font-bold mb-3 text-white tracking-tight">Konfirmasi Pengecekan</h2>
+            
+            <p class="text-[0.85rem] sm:text-sm text-white/80 leading-relaxed mb-6">
+                Apakah Anda yakin telah membaca dan memahami <b>Perhatian Penting</b> terkait validitas nama siswa dan orang tua?
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="btnBatal" class="flex-1 py-3 px-4 rounded-xl border border-white/20 text-white text-[0.9rem] font-medium hover:bg-white/5 transition-colors duration-300">
+                    Belum, Cek Lagi
+                </button>
+                <button id="btnSetuju" class="flex-1 py-3 px-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black text-[0.9rem] font-bold shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inisialisasi Ikon & Logika Modal -->
     <script>
         lucide.createIcons();
+
+        const btnBuka = document.getElementById('btnBukaSpreadsheet');
+        const modal = document.getElementById('modalKonfirmasi');
+        const btnBatal = document.getElementById('btnBatal');
+        const btnSetuju = document.getElementById('btnSetuju');
+        const spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1aP7q6uWv-_7jIdNbYc0h1ZgfnY9etYBHp006PNcep3U/edit?usp=sharing";
+
+        // Tampilkan Modal
+        btnBuka.addEventListener('click', () => {
+            modal.classList.add('show');
+        });
+
+        // Sembunyikan Modal (Tombol Batal)
+        btnBatal.addEventListener('click', () => {
+            modal.classList.remove('show');
+        });
+
+        // Aksi Setuju (Buka Link & Tutup Modal)
+        btnSetuju.addEventListener('click', () => {
+            // Buka link di tab baru
+            window.open(spreadsheetUrl, '_blank', 'noopener,noreferrer');
+            // Tutup modal setelah link diklik
+            modal.classList.remove('show');
+        });
+
+        // Tutup modal jika mengklik area luar modal (backdrop)
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
     </script>
 </body>
 </html>
