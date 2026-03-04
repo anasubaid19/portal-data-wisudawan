@@ -17,6 +17,11 @@
         body {
             font-family: 'Inter', sans-serif;
             background-color: #020611; /* Warna dasar biru sangat gelap */
+            background-image: url('ChatGPT Image Jan 12, 2026, 05_43_25 PM.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             margin: 0;
             padding: 0;
             min-height: 100dvh; /* Menggunakan dvh agar lebih presisi di mobile browser */
@@ -24,63 +29,6 @@
             align-items: center;
             justify-content: center;
             overflow-x: hidden; /* Mencegah geser horizontal di mobile */
-        }
-
-        /* Animasi Latar Belakang Liquid Silk murni CSS */
-        .bg-mesh {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: 0;
-            overflow: hidden;
-            pointer-events: none;
-        }
-
-        .silk-gold-1 {
-            position: absolute;
-            width: 150vw;
-            height: 25vh;
-            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.25) 0%, transparent 60%);
-            top: 20%;
-            left: -20%;
-            transform: rotate(-30deg);
-            filter: blur(60px);
-            animation: silkAnim 12s infinite alternate ease-in-out;
-        }
-
-        .silk-gold-2 {
-            position: absolute;
-            width: 120vw;
-            height: 20vh;
-            background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.2) 0%, transparent 60%);
-            bottom: 10%;
-            right: -20%;
-            transform: rotate(-40deg);
-            filter: blur(50px);
-            animation: silkAnim 15s infinite alternate-reverse ease-in-out;
-        }
-
-        .silk-blue {
-            position: absolute;
-            width: 100vw;
-            height: 80vh;
-            background: radial-gradient(circle at center, rgba(13, 37, 86, 0.5) 0%, transparent 70%);
-            top: -10%;
-            right: -10%;
-            filter: blur(70px);
-            animation: floatAnim 20s infinite alternate ease-in-out;
-        }
-
-        @keyframes silkAnim {
-            0% { transform: rotate(-30deg) scale(1) translateY(0); opacity: 0.6; }
-            100% { transform: rotate(-25deg) scale(1.1) translateY(5vh); opacity: 1; }
-        }
-
-        @keyframes floatAnim {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(-5vw, 5vh); }
         }
 
         /* Animasi masuk perlahan */
@@ -206,13 +154,6 @@
 </head>
 <body class="p-4 sm:p-6 text-white w-full">
 
-    <!-- Latar Belakang Liquid Silk CSS -->
-    <div class="bg-mesh">
-        <div class="silk-blue"></div>
-        <div class="silk-gold-1"></div>
-        <div class="silk-gold-2"></div>
-    </div>
-
     <main class="glass-container liquid-glass mx-auto w-full max-w-lg rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 relative overflow-hidden text-center z-10">
         
         <!-- Efek Glow Dekoratif di belakang kontainer -->
@@ -245,6 +186,7 @@
                             <li>Seluruh sertifikat disusun sesuai data yang diinput oleh Wali Kelas.</li>
                             <li>Pastikan nama <b>siswa</b>, <b>ayah</b>, dan <b>ibu</b> sudah benar.</li>
                             <li>Centang kolom konfirmasi jika data sudah final.</li>
+                            <li><span class="text-red-400 font-semibold">DILARANG KERAS</span> membagikan link/data ini kepada wali siswa ataupun siswa. Hanya Wali Kelas yang berhak mengakses dan memeriksa.</li>
                         </ul>
                         <div class="mt-2 sm:mt-3 inline-flex items-start sm:items-center gap-2 text-yellow-300 font-medium text-[0.7rem] sm:text-xs bg-yellow-400/10 px-3 py-2 sm:py-1.5 rounded-xl sm:rounded-full border border-yellow-400/20 leading-tight">
                             <i data-lucide="sparkles" class="w-3.5 h-3.5 shrink-0 mt-0.5 sm:mt-0"></i>
@@ -276,8 +218,8 @@
         </div>
     </main>
 
-    <!-- Modal Pop-up Konfirmasi -->
-    <div id="modalKonfirmasi" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-backdrop">
+    <!-- Modal Pop-up Konfirmasi 1 -->
+    <div id="modalKonfirmasi1" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-backdrop">
         <div class="modal-content liquid-glass w-full max-w-[400px] rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border border-yellow-500/20 shadow-2xl">
             <!-- Aksen Glow Emas di Modal -->
             <div class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500 rounded-full mix-blend-screen filter blur-[40px] opacity-30 pointer-events-none"></div>
@@ -293,11 +235,39 @@
             </p>
 
             <div class="flex flex-col sm:flex-row gap-3">
-                <button id="btnBatal" class="flex-1 py-3 px-4 rounded-xl border border-white/20 text-white text-[0.9rem] font-medium hover:bg-white/5 transition-colors duration-300">
+                <button id="btnBatal1" class="flex-1 py-3 px-4 rounded-xl border border-white/20 text-white text-[0.9rem] font-medium hover:bg-white/5 transition-colors duration-300">
                     Belum, Cek Lagi
                 </button>
-                <button id="btnSetuju" class="flex-1 py-3 px-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black text-[0.9rem] font-bold shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                <button id="btnLanjut1" class="flex-1 py-3 px-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black text-[0.9rem] font-bold shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
                     Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pop-up Konfirmasi 2 (Peringatan Kerahasiaan) -->
+    <div id="modalKonfirmasi2" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-backdrop">
+        <div class="modal-content liquid-glass w-full max-w-[400px] rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border border-red-500/20 shadow-2xl">
+            <!-- Aksen Glow Merah di Modal -->
+            <div class="absolute -top-10 -right-10 w-32 h-32 bg-red-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 pointer-events-none"></div>
+
+            <div class="mx-auto w-12 h-12 rounded-xl liquid-glass-card border border-white/10 flex items-center justify-center mb-5 shadow-inner">
+                <i data-lucide="shield-alert" class="text-red-400 w-6 h-6"></i>
+            </div>
+            
+            <h2 class="text-xl font-bold mb-3 text-white tracking-tight text-red-400">Peringatan Terakhir!</h2>
+            
+            <p class="text-[0.85rem] sm:text-sm text-white/80 leading-relaxed mb-6">
+                Jangan berikan tautan/data ini kepada siswa atau wali siswa untuk diperiksa sendiri. <br><br>
+                <b>Wali kelas WAJIB menyisihkan waktu</b> untuk memeriksa kebenaran data secara mandiri.
+            </p>
+
+            <div class="flex flex-col gap-3">
+                <button id="btnSetuju2" class="w-full py-3.5 px-4 rounded-xl bg-red-500 hover:bg-red-400 text-white text-[0.9rem] font-bold shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                    Saya Mengerti & Bertanggung Jawab
+                </button>
+                <button id="btnBatal2" class="w-full py-3 px-4 rounded-xl border border-white/20 text-white text-[0.9rem] font-medium hover:bg-white/5 transition-colors duration-300">
+                    Batal
                 </button>
             </div>
         </div>
@@ -308,34 +278,51 @@
         lucide.createIcons();
 
         const btnBuka = document.getElementById('btnBukaSpreadsheet');
-        const modal = document.getElementById('modalKonfirmasi');
-        const btnBatal = document.getElementById('btnBatal');
-        const btnSetuju = document.getElementById('btnSetuju');
+        const modal1 = document.getElementById('modalKonfirmasi1');
+        const modal2 = document.getElementById('modalKonfirmasi2');
+        const btnBatal1 = document.getElementById('btnBatal1');
+        const btnLanjut1 = document.getElementById('btnLanjut1');
+        const btnBatal2 = document.getElementById('btnBatal2');
+        const btnSetuju2 = document.getElementById('btnSetuju2');
         const spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1aP7q6uWv-_7jIdNbYc0h1ZgfnY9etYBHp006PNcep3U/edit?usp=sharing";
 
-        // Tampilkan Modal
+        // Tampilkan Modal 1
         btnBuka.addEventListener('click', () => {
-            modal.classList.add('show');
+            modal1.classList.add('show');
         });
 
-        // Sembunyikan Modal (Tombol Batal)
-        btnBatal.addEventListener('click', () => {
-            modal.classList.remove('show');
+        // Sembunyikan Modal 1 (Tombol Batal)
+        btnBatal1.addEventListener('click', () => {
+            modal1.classList.remove('show');
         });
 
-        // Aksi Setuju (Buka Link & Tutup Modal)
-        btnSetuju.addEventListener('click', () => {
-            // Buka link di tab baru
+        // Lanjut ke Modal 2
+        btnLanjut1.addEventListener('click', () => {
+            modal1.classList.remove('show');
+            // Beri sedikit jeda agar animasi tutup modal 1 terlihat mulus sebelum modal 2 muncul
+            setTimeout(() => {
+                modal2.classList.add('show');
+            }, 350);
+        });
+
+        // Sembunyikan Modal 2 (Tombol Batal)
+        btnBatal2.addEventListener('click', () => {
+            modal2.classList.remove('show');
+        });
+
+        // Aksi Setuju Final (Buka Link & Tutup Modal 2)
+        btnSetuju2.addEventListener('click', () => {
             window.open(spreadsheetUrl, '_blank', 'noopener,noreferrer');
-            // Tutup modal setelah link diklik
-            modal.classList.remove('show');
+            modal2.classList.remove('show');
         });
 
         // Tutup modal jika mengklik area luar modal (backdrop)
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('show');
-            }
+        [modal1, modal2].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
         });
     </script>
 </body>
