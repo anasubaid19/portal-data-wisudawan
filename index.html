@@ -1,5 +1,386 @@
 <!DOCTYPE html>
 <html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal Data Sertifikat Wisudawan</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter untuk tampilan modern dan bersih ala Apple -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #020611;
+            /* Warna dasar biru sangat gelap */
+            background-image: url('background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            margin: 0;
+            padding: 0;
+            min-height: 100dvh;
+            /* Menggunakan dvh agar lebih presisi di mobile browser */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+            /* Mencegah geser horizontal di mobile */
+        }
+
+        /* Animasi masuk perlahan */
+        @keyframes floatUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Animasi untuk footer text (Instagram Link) */
+        @keyframes subtleBounce {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
+        }
+
+        .animate-footer {
+            display: inline-block;
+            animation: subtleBounce 3s infinite ease-in-out;
+            transition: all 0.3s ease;
+        }
+
+        .animate-footer:hover {
+            color: #d4af37;
+            /* Warna Emas */
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.4);
+            transform: scale(1.05);
+            animation-play-state: paused;
+        }
+
+        .glass-container {
+            animation: floatUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        }
+
+        /* Efek Liquid Glass kustom (Ultra blur, semi-transparan, dengan border cahaya) */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(32px);
+            -webkit-backdrop-filter: blur(32px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow:
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 1px rgba(255, 255, 255, 0.3),
+                inset 0 -1px 1px rgba(255, 255, 255, 0.05);
+        }
+
+        .liquid-glass-card {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Tombol Glassy yang memantulkan aksen warna emas */
+        .btn-glass {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-glass::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: skewX(-25deg);
+            transition: 0.5s;
+        }
+
+        .btn-glass:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+            border: 1px solid rgba(255, 215, 0, 0.6);
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.25) 0%, rgba(255, 255, 255, 0.1) 100%);
+        }
+
+        .btn-glass:hover::before {
+            left: 200%;
+        }
+
+        .btn-glass:active {
+            transform: translateY(1px) scale(0.98);
+        }
+
+        /* Tampilan Mode Gelap untuk Modal Backdrop */
+        .modal-backdrop {
+            background-color: rgba(2, 6, 17, 0.85);
+            /* Selaras dengan warna bg */
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Modal Container Animation */
+        .modal-content {
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .modal-backdrop.show .modal-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        /* Gradient Text untuk judul */
+        .text-gradient {
+            background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+    </style>
+</head>
+
+<body class="p-4 sm:p-6 text-white w-full">
+
+    <main
+        class="glass-container liquid-glass mx-auto w-full max-w-lg rounded-[2rem] sm:rounded-[2.5rem] p-6 sm:p-8 md:p-10 relative overflow-hidden text-center z-10">
+
+        <!-- Efek Glow Dekoratif di belakang kontainer -->
+        <div
+            class="absolute -top-24 -right-24 w-64 h-64 bg-blue-500 rounded-full mix-blend-screen filter blur-[80px] opacity-40">
+        </div>
+        <div
+            class="absolute -bottom-24 -left-24 w-64 h-64 bg-yellow-500 rounded-full mix-blend-screen filter blur-[80px] opacity-20">
+        </div>
+
+        <div class="relative z-20">
+            <!-- Ikon Header -->
+            <div
+                class="mx-auto w-14 h-14 sm:w-16 sm:h-16 rounded-2xl liquid-glass-card flex items-center justify-center mb-5 sm:mb-6 shadow-lg border border-white/20">
+                <i data-lucide="graduation-cap" class="text-yellow-400 w-7 h-7 sm:w-8 sm:h-8"></i>
+            </div>
+
+            <h1 class="text-2xl sm:text-3xl font-bold mb-2 tracking-tight text-gradient">
+                Portal Sertifikat
+            </h1>
+            <p class="text-white/70 text-sm sm:text-base font-medium mb-6 sm:mb-8">
+                Verifikasi Data Wisudawan
+            </p>
+
+            <!-- Box Himbauan / Alert -->
+            <div
+                class="liquid-glass-card rounded-[1.25rem] sm:rounded-2xl p-4 sm:p-5 mb-6 sm:mb-8 text-left relative overflow-hidden group">
+                <!-- Aksen Garis Kiri -->
+                <div class="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-yellow-300 to-yellow-600"></div>
+
+                <div class="flex items-start gap-3 sm:gap-4">
+                    <i data-lucide="info" class="text-yellow-400 w-5 h-5 sm:w-6 sm:h-6 shrink-0 mt-0.5"></i>
+                    <div class="space-y-2 sm:space-y-3 text-[0.85rem] sm:text-[0.9rem] leading-relaxed text-white/90">
+                        <p class="font-semibold text-white">Perhatian Penting:</p>
+                        <ul class="list-disc pl-4 space-y-1 sm:space-y-1.5 marker:text-yellow-400">
+                            <li>Seluruh sertifikat disusun sesuai data yang diinput oleh Wali Kelas.</li>
+                            <li>Pastikan nama <b>siswa</b>, <b>ayah</b>, dan <b>ibu</b> sudah benar.</li>
+                            <li>Centang kolom konfirmasi jika data sudah final.</li>
+                            <li><span class="text-red-400 font-semibold">DILARANG KERAS</span> membagikan link/data ini
+                                kepada wali siswa ataupun siswa. Hanya Wali Kelas yang berhak mengakses dan memeriksa.
+                            </li>
+                        </ul>
+                        <div
+                            class="mt-2 sm:mt-3 inline-flex items-start sm:items-center gap-2 text-yellow-300 font-medium text-[0.7rem] sm:text-xs bg-yellow-400/10 px-3 py-2 sm:py-1.5 rounded-xl sm:rounded-full border border-yellow-400/20 leading-tight">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 shrink-0 mt-0.5 sm:mt-0"></i>
+                            <span>Prioritas desain diberikan pada data yang sudah lengkap.</span>
+                        </div>
+
+                        <!-- Tambahan Himbauan Kontak (WhatsApp) -->
+                        <div
+                            class="mt-3 pt-3 border-t border-white/10 flex items-start gap-2 text-[0.8rem] sm:text-[0.85rem] text-white/80">
+                            <i data-lucide="phone" class="w-4 h-4 shrink-0 mt-0.5 text-green-400"></i>
+                            <p class="leading-relaxed">Jika ada kesalahan data mohon kabari panitia atau <a
+                                    href="https://wa.me/6285921026401?text=Format%20Edit%20File%3A%0A-%20Cabang%3A%20%0A-%20Jenjang%3A%20%0A-%20Gender%3A%20%0A-%20Slide%20nomor%20berapa%3A%20%0A-%20Keterangan%20edit%3A%20"
+                                    target="_blank" rel="noopener noreferrer"
+                                    class="text-green-400 hover:text-green-300 font-medium underline underline-offset-4 decoration-green-400/30 transition-all">langsung
+                                    direct ke nomor ini</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tombol Link Spreadsheet -->
+            <button id="btnBukaSpreadsheet"
+                class="btn-glass w-full flex items-center justify-center gap-2 sm:gap-3 py-3.5 sm:py-4 px-5 sm:px-6 rounded-2xl text-white font-semibold text-[0.95rem] sm:text-lg cursor-pointer text-decoration-none border-0">
+                <span>Buka Spreadsheet Data</span>
+                <i data-lucide="arrow-up-right" class="w-4 h-4 sm:w-5 sm:h-5 opacity-80"></i>
+            </button>
+
+            <!-- Footer / Instagram Link dengan Animasi -->
+            <div class="mt-5 sm:mt-6">
+                <a href="https://www.instagram.com/_anasubaid/" target="_blank" rel="noopener noreferrer"
+                    class="animate-footer text-[0.65rem] sm:text-xs text-white/50 font-medium tracking-wide text-decoration-none cursor-pointer">
+                    created by @_anasubaid
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal Pop-up Konfirmasi 1 -->
+    <div id="modalKonfirmasi1" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-backdrop">
+        <div
+            class="modal-content liquid-glass w-full max-w-[400px] rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border border-yellow-500/20 shadow-2xl">
+            <!-- Aksen Glow Emas di Modal -->
+            <div
+                class="absolute -top-10 -right-10 w-32 h-32 bg-yellow-500 rounded-full mix-blend-screen filter blur-[40px] opacity-30 pointer-events-none">
+            </div>
+
+            <div
+                class="mx-auto w-12 h-12 rounded-xl liquid-glass-card border border-white/10 flex items-center justify-center mb-5 shadow-inner">
+                <i data-lucide="alert-triangle" class="text-yellow-400 w-6 h-6"></i>
+            </div>
+
+            <h2 class="text-xl font-bold mb-3 text-white tracking-tight">Konfirmasi Pengecekan</h2>
+
+            <p class="text-[0.85rem] sm:text-sm text-white/80 leading-relaxed mb-6">
+                Apakah Anda yakin telah membaca dan memahami <b>Perhatian Penting</b> terkait validitas nama siswa dan
+                orang tua?
+            </p>
+
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button id="btnBatal1"
+                    class="flex-1 py-3 px-4 rounded-xl border border-white/20 text-white text-[0.9rem] font-medium hover:bg-white/5 transition-colors duration-300">
+                    Belum, Cek Lagi
+                </button>
+                <button id="btnLanjut1"
+                    class="flex-1 py-3 px-4 rounded-xl bg-yellow-500 hover:bg-yellow-400 text-black text-[0.9rem] font-bold shadow-[0_0_15px_rgba(234,179,8,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                    Ya, Lanjutkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Pop-up Konfirmasi 2 (Peringatan Kerahasiaan) -->
+    <div id="modalKonfirmasi2" class="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 modal-backdrop">
+        <div
+            class="modal-content liquid-glass w-full max-w-[400px] rounded-3xl p-6 sm:p-8 text-center relative overflow-hidden border border-red-500/20 shadow-2xl">
+            <!-- Aksen Glow Merah di Modal -->
+            <div
+                class="absolute -top-10 -right-10 w-32 h-32 bg-red-500 rounded-full mix-blend-screen filter blur-[40px] opacity-20 pointer-events-none">
+            </div>
+
+            <div
+                class="mx-auto w-12 h-12 rounded-xl liquid-glass-card border border-white/10 flex items-center justify-center mb-5 shadow-inner">
+                <i data-lucide="shield-alert" class="text-red-400 w-6 h-6"></i>
+            </div>
+
+            <h2 class="text-xl font-bold mb-3 text-white tracking-tight text-red-400">Peringatan Terakhir!</h2>
+
+            <p class="text-[0.85rem] sm:text-sm text-white/80 leading-relaxed mb-6">
+                Jangan berikan tautan/data ini kepada siswa atau wali siswa untuk diperiksa sendiri. <br><br>
+                <b>Wali kelas WAJIB menyisihkan waktu</b> untuk memeriksa kebenaran data secara mandiri.
+            </p>
+
+            <div class="flex flex-col gap-3">
+                <button id="btnSetuju2"
+                    class="w-full py-3.5 px-4 rounded-xl bg-red-500 hover:bg-red-400 text-white text-[0.9rem] font-bold shadow-[0_0_15px_rgba(239,68,68,0.4)] transition-all duration-300 transform hover:scale-[1.02] active:scale-95">
+                    Saya Mengerti & Bertanggung Jawab
+                </button>
+                <button id="btnBatal2"
+                    class="w-full py-3 px-4 rounded-xl border border-white/20 text-white text-[0.9rem] font-medium hover:bg-white/5 transition-colors duration-300">
+                    Batal
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Inisialisasi Ikon & Logika Modal -->
+    <script>
+        lucide.createIcons();
+
+        const btnBuka = document.getElementById('btnBukaSpreadsheet');
+        const modal1 = document.getElementById('modalKonfirmasi1');
+        const modal2 = document.getElementById('modalKonfirmasi2');
+        const btnBatal1 = document.getElementById('btnBatal1');
+        const btnLanjut1 = document.getElementById('btnLanjut1');
+        const btnBatal2 = document.getElementById('btnBatal2');
+        const btnSetuju2 = document.getElementById('btnSetuju2');
+        const spreadsheetUrl = "https://docs.google.com/spreadsheets/d/1aP7q6uWv-_7jIdNbYc0h1ZgfnY9etYBHp006PNcep3U/edit?usp=sharing";
+
+        // Tampilkan Modal 1
+        btnBuka.addEventListener('click', () => {
+            modal1.classList.add('show');
+        });
+
+        // Sembunyikan Modal 1 (Tombol Batal)
+        btnBatal1.addEventListener('click', () => {
+            modal1.classList.remove('show');
+        });
+
+        // Lanjut ke Modal 2
+        btnLanjut1.addEventListener('click', () => {
+            modal1.classList.remove('show');
+            // Beri sedikit jeda agar animasi tutup modal 1 terlihat mulus sebelum modal 2 muncul
+            setTimeout(() => {
+                modal2.classList.add('show');
+            }, 350);
+        });
+
+        // Sembunyikan Modal 2 (Tombol Batal)
+        btnBatal2.addEventListener('click', () => {
+            modal2.classList.remove('show');
+        });
+
+        // Aksi Setuju Final (Buka Link & Tutup Modal 2)
+        btnSetuju2.addEventListener('click', () => {
+            window.open(spreadsheetUrl, '_blank', 'noopener,noreferrer');
+            modal2.classList.remove('show');
+        });
+
+        // Tutup modal jika mengklik area luar modal (backdrop)
+        [modal1, modal2].forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+    </script>
+</body>
+
+</html><!DOCTYPE html>
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
